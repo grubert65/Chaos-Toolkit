@@ -1,0 +1,19 @@
+{
+  "actions":[
+     {
+          "type": "perl",
+          "module": "ToxiProxy",
+          "func": "add_toxic",
+          "arguments": {
+              "name": "cassandra-node-1",
+              "type": "latency",
+              "stream": "downstream",
+              "attributes": {"latency": 200}
+          }
+     },{
+          "type": "perl",
+          "func": "sleep",
+          "arguments": [ 1 ]
+     }
+  ]
+}
