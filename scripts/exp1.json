@@ -1,10 +1,15 @@
 {
+  "steady_state":[
+  ],
   "actions":[
      {
           "type": "perl",
           "module": "ToxiProxy",
+          "constructor_attributes": {
+            "host":"localhost"
+          },
           "func": "add_toxic",
-          "arguments": {
+          "attributes": {
               "name": "cassandra-node-1",
               "type": "latency",
               "stream": "downstream",
@@ -13,7 +18,9 @@
      },{
           "type": "perl",
           "func": "sleep",
-          "arguments": [ 1 ]
+          "attributes": [ 1 ]
      }
+  ],
+  "rollback":[
   ]
 }

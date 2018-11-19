@@ -1,8 +1,44 @@
 package Chaos::Toolkit;
 
 use 5.006;
-use strict;
-use warnings;
+use Moo;
+use Log::Log4perl;
+use Time::HiRes    'gettimeofday';
+
+has 'actions' => ( is => 'rw', isa => 'ArrayRef', required => 1 );
+has 'log' => (
+    is      => 'rw',
+    isa     => 'Log::Log4perl::Logger',
+    lazy    => 1,
+    default => sub { return Log::Log4perl->get_logger( __PACKAGE__ ) }
+);
+
+
+sub run_actions {
+    my $self = shift;
+
+    foreach my $action ( @{$self->actions} ) {
+        $self->log->info("[gettimeofday][ACTION START]: $action->{func}");
+        if ( $action->{module} ) {
+            eval {
+                require $action->{module};
+                my $o = $action->{module}->new( $action->{constructor_attributes} );
+                my $func = $action->{func};
+                $o->$func( $action->{attributes});
+            };
+        } else {
+            my $func = $action->{func};
+            &$func( $action->{attributes});
+        }
+        $self->log->info("[gettimeofday][ACTION END]: $action->{func}");
+    }
+}
+
+
+
+1;
+
+__END__
 
 =head1 NAME
 

@@ -7,7 +7,6 @@ use Log::Log4perl   ':easy';
 
 Log::Log4perl->easy_init($DEBUG);
 
-
 sub usage {
     my $txt = <<EOT;
 
