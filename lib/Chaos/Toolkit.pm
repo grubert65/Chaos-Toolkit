@@ -2,23 +2,63 @@ package Chaos::Toolkit;
 
 use 5.006;
 use Moo;
+use Types::Standard qw( Str HashRef );
+use Time::HiRes     'gettimeofday';
+use JSON::XS        'decode_json';
 use Log::Log4perl;
-use Time::HiRes    'gettimeofday';
 
-has 'actions' => ( is => 'rw', isa => 'ArrayRef', required => 1 );
+has 'experiment_file' => ( is => 'rw', isa => Str, required => 1 );
+has 'experiment' => (
+    is      => 'ro',
+    isa     => HashRef,
+    writer  => '_set_experiment',
+    default => sub { {} }
+);
 has 'log' => (
     is      => 'rw',
-    isa     => 'Log::Log4perl::Logger',
     lazy    => 1,
     default => sub { return Log::Log4perl->get_logger( __PACKAGE__ ) }
 );
 
 
+sub BUILD {
+    my $self = shift;
+
+    die "Experiment file $self->{experiment_file} not found or not readable\n" 
+        unless -f $self->{experiment_file};
+    {
+        local $/;
+        open my $fh, "<$self->{experiment_file}"
+            or die "Error opening file $self->{experiment_file}: $!\n";
+        my $json_str=<$fh>;
+        $self->_set_experiment( decode_json( $json_str ) );
+        close $fh;
+    }
+}
+
+#=============================================================
+
+=head2 run_actions
+
+=head3 INPUT
+
+=head3 OUTPUT
+
+1 or die in case or errors
+
+=head3 DESCRIPTION
+
+Tries to run all actions defined
+
+=cut
+
+#=============================================================
 sub run_actions {
     my $self = shift;
 
-    foreach my $action ( @{$self->actions} ) {
-        $self->log->info("[gettimeofday][ACTION START]: $action->{func}");
+    $DB::single=1;
+    foreach my $action ( @{$self->experiment->{actions}} ) {
+        $self->log->info("[".gettimeofday."][ACTION START]: $action->{func}");
         if ( $action->{module} ) {
             eval {
                 require $action->{module};
@@ -28,10 +68,15 @@ sub run_actions {
             };
         } else {
             my $func = $action->{func};
-            &$func( $action->{attributes});
+            {
+                no strict 'refs';
+                &$func( $action->{attributes});
+            }
         }
-        $self->log->info("[gettimeofday][ACTION END]: $action->{func}");
+        $self->log->info("[".gettimeofday."][ACTION END]: $action->{func}");
     }
+
+    return 1;
 }
 
 
