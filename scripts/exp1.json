@@ -8,17 +8,16 @@
           "constructor_attributes": {
             "host":"localhost"
           },
-          "func": "add_toxic",
+          "func": "create_proxy",
           "attributes": {
-              "name": "cassandra-node-1",
-              "type": "latency",
-              "stream": "downstream",
-              "attributes": {"latency": 200}
+              "name"    : "cassandra-node-1",
+              "listen"  : "localhost:8090",
+              "upstream": "localhost:8080"
           }
      },{
           "type": "perl",
           "func": "sleep",
-          "attributes": [ 1 ]
+          "attributes": [ 2 ]
      }
   ],
   "rollback":[

@@ -6,6 +6,7 @@ use Types::Standard qw( Str HashRef );
 use Time::HiRes     'gettimeofday';
 use JSON::XS        'decode_json';
 use Log::Log4perl;
+use Try::Tiny;
 
 has 'experiment_file' => ( is => 'rw', isa => Str, required => 1 );
 has 'experiment' => (
@@ -56,21 +57,24 @@ Tries to run all actions defined
 sub run_actions {
     my $self = shift;
 
-    $DB::single=1;
     foreach my $action ( @{$self->experiment->{actions}} ) {
         $self->log->info("[".gettimeofday."][ACTION START]: $action->{func}");
         if ( $action->{module} ) {
-            eval {
-                require $action->{module};
-                my $o = $action->{module}->new( $action->{constructor_attributes} );
-                my $func = $action->{func};
+            $DB::single=1;
+            eval "use $action->{module};";
+            die "Module $action->{module} not loadable\n" unless ( $@ ne '1');
+            my $o = $action->{module}->new( $action->{constructor_attributes} );
+            my $func = $action->{func};
+            try {
                 $o->$func( $action->{attributes});
-            };
+            } catch {
+                $self->log->error($_);
+            }
         } else {
             my $func = $action->{func};
-            {
-                no strict 'refs';
-                &$func( $action->{attributes});
+            eval "$func( @{$action->{attributes}})";
+            if ( $@ ) {
+                $self->log->error("Error executing $func: $@");
             }
         }
         $self->log->info("[".gettimeofday."][ACTION END]: $action->{func}");
