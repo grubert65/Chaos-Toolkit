@@ -11,7 +11,7 @@ Log::Log4perl->easy_init($DEBUG);
 sub usage {
     my $txt = <<EOT;
 
-    Usage: $0 <an experiment JSON file>
+    Usage: $0 -experiment <an experiment JSON file>
 
 EOT
 }
