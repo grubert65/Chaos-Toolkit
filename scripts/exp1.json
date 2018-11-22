@@ -18,6 +18,14 @@
           "type": "perl",
           "func": "sleep",
           "attributes": [ 2 ]
+     },{
+          "type": "perl",
+          "module": "ToxiProxy",
+          "constructor_attributes": {
+            "host":"localhost"
+          },
+          "func": "delete_proxy",
+          "attributes": [ "cassandra-node-1" ]
      }
   ],
   "rollback":[

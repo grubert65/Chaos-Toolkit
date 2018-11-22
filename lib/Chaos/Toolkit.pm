@@ -66,7 +66,18 @@ sub run_actions {
             my $o = $action->{module}->new( $action->{constructor_attributes} );
             my $func = $action->{func};
             try {
-                $o->$func( $action->{attributes});
+                die "Error: method $func not implemented by class $action->{module}\n"
+                    unless $o->can( $func );
+                my $attrs = $action->{attributes};
+                if (ref $attrs eq 'ARRAY') {
+                    if (@$attrs == 1 ) {
+                        $o->$func( $attrs->[0] );
+                    } else {
+                        $o->$func( $attrs );
+                    }
+                } else {
+                    $o->$func( $attrs );
+                }
             } catch {
                 $self->log->error($_);
             }

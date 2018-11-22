@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Log::Log4perl qw(:easy);
+use LWP::ConsoleLogger::Everywhere;
 
 Log::Log4perl->easy_init($DEBUG);
 
