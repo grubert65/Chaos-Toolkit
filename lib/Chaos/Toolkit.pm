@@ -1,4 +1,5 @@
 package Chaos::Toolkit;
+our $VERSION = '0.01';
 
 use 5.006;
 use Moo;
@@ -37,30 +38,12 @@ sub BUILD {
     }
 }
 
-#=============================================================
-
-=head2 run_actions
-
-=head3 INPUT
-
-=head3 OUTPUT
-
-1 or die in case or errors
-
-=head3 DESCRIPTION
-
-Tries to run all actions defined
-
-=cut
-
-#=============================================================
 sub run_actions {
     my $self = shift;
 
     foreach my $action ( @{$self->experiment->{actions}} ) {
         $self->log->info("[".gettimeofday."][ACTION START]: $action->{func}");
         if ( $action->{module} ) {
-            $DB::single=1;
             eval "use $action->{module};";
             die "Module $action->{module} not loadable\n" unless ( $@ ne '1');
             my $o = $action->{module}->new( $action->{module_attributes} );
@@ -108,54 +91,19 @@ Chaos::Toolkit - The great new Chaos::Toolkit!
 
 Version 0.01
 
-=cut
-
-our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use Chaos::Toolkit;
 
-    my $foo = Chaos::Toolkit->new();
-    ...
+    my $c = Chaos::Toolkit->new( experiment_file => "/path/to/experiment.json" );
 
-=head1 EXPORT
+    $c->run_actions();
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
-
-=cut
-
-sub function1 {
-}
-
-=head2 function2
-
-=cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
 Marco Masetti, C<< <grubert65 at gmail.com> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to C<bug-chaos-toolkit at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Chaos-Toolkit>.  I will be notified, and then you'll
-automatically be notified of progress on your bug as I make changes.
-
-
 
 
 =head1 SUPPORT
@@ -163,32 +111,6 @@ automatically be notified of progress on your bug as I make changes.
 You can find documentation for this module with the perldoc command.
 
     perldoc Chaos::Toolkit
-
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker (report bugs here)
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Chaos-Toolkit>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Chaos-Toolkit>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Chaos-Toolkit>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Chaos-Toolkit/>
-
-=back
-
-
-=head1 ACKNOWLEDGEMENTS
 
 
 =head1 LICENSE AND COPYRIGHT

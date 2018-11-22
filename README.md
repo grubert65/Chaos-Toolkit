@@ -31,7 +31,7 @@ The JSON file data model is loosely based on the chaos-toolkit project, basicall
 
 
 # Releases
-Release 0.0.1 is only able to run actions based on perl functions, attributes description:
+Release 0.01 is only able to run actions based on perl functions, attributes description:
 
 -   actions: the list of actions
 -   type: the action provider, for this release only "perl" is accepted
