@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use Log::Log4perl qw(:easy);
-use LWP::ConsoleLogger::Everywhere;
+use Proc::Find    qw( proc_exists );
 
 Log::Log4perl->easy_init($DEBUG);
 
@@ -11,7 +11,10 @@ BEGIN {
     use_ok('Chaos::Toolkit');
 }
 
-ok( my $c = Chaos::Toolkit->new( experiment_file => './scripts/exp1.json' ), 'new' );
-ok( $c->run_actions(), 'run_actions' );
+SKIP: {
+    skip "toxiproxy server not running", 2 unless proc_exists( name => 'toxiproxy-server' );
+    ok( my $c = Chaos::Toolkit->new( experiment_file => './scripts/exp1.json' ), 'new' );
+    ok( $c->run_actions(), 'run_actions' );
+}
 
 done_testing;
