@@ -22,6 +22,7 @@ GetOptions(
     "experiment=s" => \$experiment_file
 ) or die usage();
 
+die usage() unless (defined $experiment_file );
 die usage() unless -f $experiment_file;
 
 my $experiment;
