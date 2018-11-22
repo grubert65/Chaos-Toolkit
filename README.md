@@ -4,6 +4,24 @@ A very simple chaos toolkit engine
 # Description
 This module provides a cli (chaos.pl) to run simple Chaos Engineering experiments declared in a JSON file.
 
+# Installation
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+# Support and documentation
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Chaos::Toolkit
+
+
+
 # Experiment file description
 The JSON file data model is loosely based on the chaos-toolkit project, basically eacy experiment is split into 3 sections:
 
@@ -24,21 +42,15 @@ Release 0.0.1 is only able to run actions based on perl functions, attributes de
 
 
 
-# Workflow
-The cli workflow is the following:
+# LICENSE AND COPYRIGHT
 
-- checks input param (the experiment JSON file)
-- opens and parses the file
-- for each action:
--- logs action start call
--- if a module is defined:
---- require the module
---- call the constructor (defaults to "new") passing the construction_attributes field to get a module object
---- call the function on the object passing the function attributes
--- else
---- call the function passing the function attributes
--- logs action end call
+Copyright (C) 2018 Marco Masetti
 
+This program is free software; you can redistribute it and/or modify it
+under the terms of the the Artistic License (2.0). You may obtain a
+copy of the full license at:
+
+http://www.perlfoundation.org/artistic_license_2_0
 
 
 

@@ -5,7 +5,7 @@
      {
           "type": "perl",
           "module": "ToxiProxy",
-          "constructor_attributes": {
+          "module_attributes": {
             "host":"localhost"
           },
           "func": "create_proxy",
@@ -21,7 +21,7 @@
      },{
           "type": "perl",
           "module": "ToxiProxy",
-          "constructor_attributes": {
+          "module_attributes": {
             "host":"localhost"
           },
           "func": "delete_proxy",

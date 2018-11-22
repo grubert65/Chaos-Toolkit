@@ -63,7 +63,7 @@ sub run_actions {
             $DB::single=1;
             eval "use $action->{module};";
             die "Module $action->{module} not loadable\n" unless ( $@ ne '1');
-            my $o = $action->{module}->new( $action->{constructor_attributes} );
+            my $o = $action->{module}->new( $action->{module_attributes} );
             my $func = $action->{func};
             try {
                 die "Error: method $func not implemented by class $action->{module}\n"
