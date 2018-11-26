@@ -16,7 +16,7 @@ sub usage {
 EOT
 }
 
-my ( $experiment_file );
+my $experiment_file;
 
 GetOptions(
     "experiment=s" => \$experiment_file
@@ -25,18 +25,7 @@ GetOptions(
 die usage() unless (defined $experiment_file );
 die usage() unless -f $experiment_file;
 
-my $experiment;
-{
-    local $/;
-    open my $fh, "<$experiment_file"
-        or die "Error opening file $experiment_file: $!\n";
-    my $json_str=<$fh>;
-    $experiment = decode_json( $json_str );
-    close $fh;
-
-}
-
 my $c = Chaos::Toolkit->new(
-    actions => $experiment->{actions}
+    experiment_file => $experiment_file 
 );
 $c->run_actions();
