@@ -53,11 +53,7 @@ sub run_actions {
                     unless $o->can( $func );
                 my $attrs = $action->{attributes};
                 if (ref $attrs eq 'ARRAY') {
-#                     if (@$attrs == 1 ) {
-#                         $o->$func( $attrs->[0] );
-#                     } else {
-                        $o->$func( @$attrs );
-#                     }
+                    $o->$func( @$attrs );
                 } else {
                     $o->$func( $attrs );
                 }
